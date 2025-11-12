@@ -110,8 +110,8 @@ public class RobotContainer {
 		autoChooser.addOption("Timed Taxi", new Taxi());
         autoChooser.addOption("Limelight Test", new LimelightTest(drivetrain, vision, 0));
 
-        //Pathplanner autos
-        autoChooser.addOption("LimelightTest", new PathPlannerAuto("PleaseWork"));
+        //Pathplanner autos WIP
+        autoChooser.addOption("LimelightTest", new PathPlannerAuto("Please Work"));
 
 		SmartDashboard.putData("Auton Chooser", autoChooser);
     }
