@@ -26,10 +26,12 @@ public class GoToAprilTag extends Command {
 
     @Override
     public void execute() {
-        if (!vision.hasTag()) {
-            drivetrain.drive(0, 0, 0);
-            return;
-        }
+        //Sometimes tag is sensed and immediately not sensed
+
+        // if (!vision.hasTag()) {
+        //     drivetrain.drive(0, 0, 0);
+        //     return;
+        // }
 
         Pose2d tagPose = vision.getFieldTagPose(tagID);
         Pose2d robotPose = drivetrain.getPose();

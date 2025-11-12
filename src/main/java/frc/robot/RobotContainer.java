@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import frc.robot.commands.autons.BasicCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -107,6 +109,10 @@ public class RobotContainer {
 		autoChooser.setDefaultOption("nothing", null);
 		autoChooser.addOption("Timed Taxi", new Taxi());
         autoChooser.addOption("Limelight Test", new LimelightTest(drivetrain, vision, 0));
+
+        //Pathplanner autos
+        autoChooser.addOption("LimelightTest", new PathPlannerAuto("PleaseWork"));
+
 		SmartDashboard.putData("Auton Chooser", autoChooser);
     }
 
@@ -117,4 +123,8 @@ public class RobotContainer {
     public static CommandSwerveDrivetrain getSwerveDrivetrain() {
         return drivetrain;
     }
+    	public static Command getPlanned(String plan) {
+		BasicCommands.setCommands();
+		return new PathPlannerAuto(plan);
+	}
 }

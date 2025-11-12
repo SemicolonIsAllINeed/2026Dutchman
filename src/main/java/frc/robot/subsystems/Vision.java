@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.configs.constants.VisionConstants.FRONT_CAMERA_NAME;
 
 public class Vision extends SubsystemBase {
-
     private static Vision instance;
 
     private HttpCamera cameraFeed;
