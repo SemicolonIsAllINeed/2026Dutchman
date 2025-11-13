@@ -35,10 +35,10 @@ public class GoToAprilTag extends Command {
 
         Pose2d tagPose = vision.getFieldTagPose(tagID);
         Pose2d robotPose = drivetrain.getPose();
-
+        //Desired x & y locations minus actual
         double dx = tagPose.getX() - robotPose.getX();
         double dy = tagPose.getY() - robotPose.getY();
-
+        
         double kP = 1.0; // Simple proportional gain
         double vx = kP * dx;
         double vy = kP * dy;

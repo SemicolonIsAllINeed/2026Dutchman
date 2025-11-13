@@ -18,7 +18,7 @@ public class LimelightTest extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new WaitCommand(0.2),
                 new GoToAprilTag(drivetrain, vision, tagID).withTimeout(5.0),
-                new Elevate(ELEVATOR_L2_HEIGHT)
+                new Elevate(ELEVATOR_L2_HEIGHT).withTimeout(2)
             )
         );
     }

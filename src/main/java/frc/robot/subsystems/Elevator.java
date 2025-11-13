@@ -90,7 +90,6 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         motor.setVoltage(motorSpeed * ROBOT_VOLTAGE);
-
         elevatorPosition = calculateElevatorPosition();
         fixWithLimitSwitch();
 

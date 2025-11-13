@@ -35,7 +35,6 @@ public class Elevate extends Command {
         this.targetPosition = targetPosition;
         this.elevatorSpeed = POS_CONSTRAINTS.maxVelocity;
         this.elevatorAcceleration = POS_CONSTRAINTS.maxAcceleration;
-
         addRequirements(elevator);
     }
 
@@ -44,7 +43,6 @@ public class Elevate extends Command {
         this.targetPosition = targetPosition;
         this.elevatorSpeed = elevatorSpeed;
         this.elevatorAcceleration = POS_CONSTRAINTS.maxAcceleration;
-
         addRequirements(elevator);
     }
 
@@ -53,7 +51,6 @@ public class Elevate extends Command {
         this.targetPosition = targetPosition;
         this.elevatorSpeed = elevatorSpeed;
         this.elevatorAcceleration = elevatorAcceleration;
-
         addRequirements(elevator);
     }
 
