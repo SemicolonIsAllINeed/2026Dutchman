@@ -6,7 +6,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.RobotContainer;
 
-
+//Mainly for teleop use, to hunt for and face an april tag while allowing forward/backward control
 public class HuntTag extends Command {
 
     private final CommandSwerveDrivetrain drivetrain;

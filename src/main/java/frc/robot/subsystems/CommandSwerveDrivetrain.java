@@ -10,13 +10,17 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.configs.constants.TunerConstants;
 import frc.robot.configs.constants.TunerConstants.TunerSwerveDrivetrain;
 
+
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
@@ -38,7 +43,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
     private final CommandSwerveDrivetrain drivetrain = this;
-
+    private Pose2d currentPose = new Pose2d();
+    private SwerveDriveOdometry odometry;
+    private final SwerveModule<TalonFX, TalonFX, CANcoder>[] swerveModules = getModules();
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -72,7 +79,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             this
         )
     );
-
+    
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
     private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
@@ -132,11 +139,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
+        
     ) {
         super(drivetrainConstants, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        SwerveModule<TalonFX, TalonFX, CANcoder>[] swerveModules = getModules();
     }
 
     /**
@@ -315,13 +324,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         setControl(request);
     }
 
-    public Pose2d getPose() {
-        return new Pose2d(
-            this.getPose().getTranslation(),
-            this.getPose().getRotation().times(Math.PI / 180)
-        );
-    }
-
     public void driveLock(double x, double y, double omega) {
         // Drive command without chassis speeds
         SwerveRequest request = new SwerveRequest.RobotCentric()
@@ -353,17 +355,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         });
     }
     
-    public Command driveRotationalCommand(double x, double y, int rotation) {
-        return run(() -> {
-            if (joystick.getRawButton(2)){
-                int rot = 1;
-                while(rot < 10){
-                    driveLockCommand(x,y,rot);
-                    rot++;
-                }
-            } else {
-                drive(0,0,0);
-            }
-        });
+    public void setPose(Pose2d newPose) {
+        this.currentPose = newPose;
     }
+    //Temporary pose method until odometry is figured out
+    public Pose2d getPose() {
+        return currentPose;
+    }
+
+    public Command driveLockCommand(double x, double y, double rot) {
+        return run(() -> driveRelative(x, y, rot));
+    }
+
+    // public Pose2d getPose() {
+
+    // }
 }
