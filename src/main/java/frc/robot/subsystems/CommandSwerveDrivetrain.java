@@ -32,13 +32,15 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.configs.constants.TunerConstants;
 import frc.robot.configs.constants.TunerConstants.TunerSwerveDrivetrain;
-
+//using chassis speeds for pathplanner
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    
     private final edu.wpi.first.wpilibj.Joystick joystick = new edu.wpi.first.wpilibj.Joystick(0);
     private static final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private static final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
@@ -49,6 +51,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    //Speed for pathplanenr with chassis speeds
+    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0, 0, 0);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -146,6 +150,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         SwerveModule<TalonFX, TalonFX, CANcoder>[] swerveModules = getModules();
+
     }
 
     /**
@@ -203,6 +208,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
     }
+    //Overloaded constructor with pathplanner autobuilder
+
+    //Anthony Working on!
+
+    // public CommandSwerveDrivetrain(
+    //     SwerveDrivetrainConstants drivetrainConstants,
+    //     double odometryUpdateFrequency,
+    //     Matrix<N3, N1> odometryStandardDeviation,
+    //     Matrix<N3, N1> visionStandardDeviation,
+    //     SwerveModuleConstants<?, ?, ?>... modules
+    // ) {
+    //     super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+    //     if (Utils.isSimulation()) {
+    //         startSimThread();
+    //     }
+    // }
+
 
     /**
      * Returns a command that applies the specified control request to this swerve drivetrain.
@@ -362,12 +384,26 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Pose2d getPose() {
         return currentPose;
     }
+    //other pathplanner methods here
+    //resets the odometry of the robot
+
+    //Anthony Working on!
+
+    // public void resetPose(Pose2d pose){
+    //     this.odometry.
+    // }
+
+
+
+    //Returns the robot-relative chassis speeds; not actually doing anything rn since chassis speeds arent 
+    public ChassisSpeeds getCurrentSpeeds(){
+        return chassisSpeeds;
+    }
+
 
     public Command driveLockCommand(double x, double y, double rot) {
         return run(() -> driveRelative(x, y, rot));
     }
 
-    // public Pose2d getPose() {
-
-    // }
+    
 }

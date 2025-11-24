@@ -86,7 +86,7 @@ public class RobotContainer {
 
 
         // Elevator controls
-        Elevator elevator = Elevator.getInstance();
+        Elevator  yElevatorelevator = Elevator.getInstance();
         wController.pov(90).onTrue(Elevate.rest());
         wController.pov(270).onTrue(Elevate.l2());
         wController.pov(180).onTrue(Elevate.l3());
